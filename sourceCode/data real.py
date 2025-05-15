@@ -109,22 +109,22 @@ def visualisasi(client):
 visualisasi('mobile')
 visualisasi('desktop')
 
-def perbandingan(tek1,tek2):
+def perbandingan(tekno1,tekno2):
 
     df_pivot_baru = df3
     fig2 = go.Figure()
     
-    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tek1}'], mode='lines+markers', name=f'{tek1}'))
-    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tek2}'], mode='lines+markers', name=f'{tek2}'))
+    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tekno1}'], mode='lines+markers', name=f'{tekno1}'))
+    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tekno2}'], mode='lines+markers', name=f'{tekno2}'))
     
     fig2.update_layout(
-        title=f"Perbandingan jumlah penggunaan teknologi {tek1} dan {tek2}",
+        title=f"Perbandingan jumlah penggunaan teknologi {tekno1} dan {tekno2}",
         xaxis_title="Tanggal",
         yaxis_title="Jumlah penggunaan",
         template="plotly_white"
     )
     fig2.show()
-    fig2.write_html(f"sample {tek1,tek2}.html")
+    fig2.write_html(f"sample {tekno1,tekno2}.html")
     
     #persentase
     
@@ -135,15 +135,15 @@ def perbandingan(tek1,tek2):
     
     fig2 = go.Figure()
     
-    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tek1}'], mode='lines+markers', name=f'{tek1}'))
-    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tek2}'], mode='lines+markers', name=f'{tek2}'))    
+    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tekno1}'], mode='lines+markers', name=f'{tekno1}'))
+    fig2.add_trace(go.Scatter(x=df_pivot_baru.index, y=df_pivot_baru[f'{tekno2}'], mode='lines+markers', name=f'{tekno2}'))    
     fig2.update_layout(
-        title=f"Perbandingan persentase penggunaan teknologi {tek1} dan {tek2}",
+        title=f"Perbandingan persentase penggunaan teknologi {tekno1} dan {tekno2}",
         xaxis_title="Tanggal",
         yaxis_title="Peresentase penggunaan",
         template="plotly_white"
     )
     fig2.show()
-    fig2.write_html(f"sample persentase {tek1,tek2}.html")
+    fig2.write_html(f"sample persentase {tekno1,tekno2}.html")
     
 perbandingan('jQuery', 'Angular')
