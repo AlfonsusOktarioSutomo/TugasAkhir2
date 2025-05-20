@@ -6,7 +6,7 @@ Bab ini akan membahas deskripsi data, penyiapan data, dan eksplorasi data dengan
 \section{Deskripsi data}
 \label{sec:descdat}
 
-Data yang digunakan adalah data yang memiliki format \textit{Comma Separated Value} dengan nama file ''data\_real.csv``. Data ini didapatkan dengan menjalankan kueri pada Kode~\ref{kode:kumpuldatareal} di \textit{platform} bernama \textit{Google BigQuery}. Kueri yang ada akan mengembalikan tabel yang berisi empat kolom dan memiliki 330.781 baris. Data ini diambil dalam rentang waktu 1 Januari 2024 sampai 31 Desember 2024. Sebagai gambaran Tabel~\ref{tab:sepuluhreal} merupakan sepuluh baris pertama dari data yang akan digunakan.
+Data yang digunakan adalah data yang memiliki format \textit{Comma Separated Value} dengan nama file ``data\_real.csv''. Data ini didapatkan dengan menjalankan kueri pada Kode~\ref{kode:kumpuldatareal} di \textit{platform} bernama \textit{Google BigQuery}. Kueri yang ada akan mengembalikan tabel yang berisi empat kolom dan memiliki 330.781 baris. Data ini diambil dalam rentang waktu 1 Januari 2024 sampai 31 Desember 2024. Sebagai gambaran Tabel~\ref{tab:sepuluhreal} merupakan sepuluh baris pertama dari data yang akan digunakan.
 
 \begin{lstlisting}[language=SQL, caption=Kode untuk mengumpulkan data \textit{real}, label=kode:kumpuldatareal]
 
@@ -76,7 +76,7 @@ Setelah data dibersihkan, kemudian data diubah ke dalam pivot tabel untuk lebih 
 \label{tab:tabelpivot}
 \begin{tabular}{lllll}
 \hline
-\multicolumn{1}{|c|}{date} & \multicolumn{1}{l|}{Bootstrap} & \multicolumn{1}{l|}{Google Analytics} & \multicolumn{1}{l|}{Google Font API} & \multicolumn{1}{l|}{...} \\ \hline
+\multicolumn{1}{|c|}{date} & \multicolumn{1}{r|}{Bootstrap} & \multicolumn{1}{r|}{Google Analytics} & \multicolumn{1}{r|}{Google Font API} & \multicolumn{1}{r|}{...} \\ \hline
 \multicolumn{1}{|l|}{2019-01-01} & \multicolumn{1}{l|}{10.333.295} & \multicolumn{1}{l|}{27.675.700} & \multicolumn{1}{l|}{15.906.025} & \multicolumn{1}{l|}{...} \\ \hline
 \multicolumn{1}{|l|}{2019-02-01} & \multicolumn{1}{l|}{9.989.325} & \multicolumn{1}{l|}{26.912.725} & \multicolumn{1}{l|}{15.522.950} & \multicolumn{1}{l|}{...} \\ \hline
 \multicolumn{1}{|l|}{2019-03-01} & \multicolumn{1}{l|}{9.960.270} & \multicolumn{1}{l|}{26.805.405} & \multicolumn{1}{l|}{15.518.165} & \multicolumn{1}{l|}{...} \\ \hline
@@ -129,11 +129,31 @@ Kemudian sepuluh teknologi yang paling banyak digunakan ini divisualisasikan per
     \label{fig:sepuluhteknologireal}
 \end{figure}
 
-Visualisasi yang dihasilkan menunjukkan adanya peningkatan jumlah penggunaan untuk semua teknologi. Terlihat bahwa \textit{core-js} adalah teknologi yang baru masuk sebagai teknologi yang paling banyak digunakan mulai dari Agustus 2021 namun langsung menjadi teknologi terbanyak dipakai urutan ke--6 di bulan selanjutnya. Selain \textit{core-js} ada juga teknologi \textit{Open Graph} yang baru muncul di bulan September 2022 dan langsung menempati urutan ketiga sebagai teknologi yang paling banyak digunakan dalam membangun dan mengembangkan \web yang kemudian menyalip \textit{Google Analytics} pada bulan Maret 2023.
+Visualisasi yang dihasilkan menunjukkan adanya peningkatan jumlah penggunaan untuk semua teknologi. Peningkatan paling besar terjadi pada bulan Mei 2022 hingga Agustus 2022. Hal ini kemungkinan terjadi karena adanya peningkatan jumlah \web yang diuji oleh halaman \http. Hal ini terlihat dari jumlah penggunaan semua teknologi yang melonjak secara signifikan di antara Mei 2022 sampai Agustus 2022 seperti yang terlihat pada tabel ~\ref{tab:lonjakan} terlihat adanya perbedaan 90.000.000 antara bulan April 2022 dan Mei 2022. Hal ini yang menyebabkan semua teknologi mengalami peningkatan pada bulan tersebut.
 
-Hasil yang didapatkan dinilai kurang proporsional karena agar perbandingan yang dilakukan lebih proporsional, maka visualisasi diubah menjadi visualisasi berdasarkan persentase penggunaan teknologi bukan lagi berdasarkan jumlah penggunaan. Hal ini dilakukan karena total jumlah penggunaan untuk semua teknologi setiap bulannya tidak sama sehingga agar lebih proporsional. Hasil visualisasi berdasarkan persentase penggunaan ini dapat dilihat pada Gambar~\ref{fig:persentasereal}.
+\begin{table}[H]
+\centering
+\caption{Perubahan jumlah sample}
+\label{tab:lonjakan}
+\begin{tabular}{|l|r|}
+\hline
+date & jumlah \\ \hline
+2022-01-01 & 88.849.500 \\ \hline
+2022-02-01 & 91.860.601 \\ \hline
+2022-03-01 & 98.950.365 \\ \hline
+2022-04-01 & 101.368.693 \\ \hline
+2022-05-01 & 195.567.380 \\ \hline
+2022-06-01 & 180.854.521 \\ \hline
+2022-07-01 & 239.389.984 \\ \hline
+2022-08-01 & 349.980.357 \\ \hline
+\end{tabular}
+\end{table}
 
-Terlihat adanya penurunan persentase penggunaan untuk semua teknologi yang paling banyak digunakan. Penurunan paling rendah terjadi untuk teknologi \textit{jQuery Migrate} pada bulan November 2020. yang hanya dipakai sebanyak 0,02017\%. Penurunan pada setiap teknologi juga terpengaruh dari jumlah penggunaannya yang semakin tinggi setiap bulan nya.  
+Terlihat bahwa \textit{core-js} adalah teknologi yang baru masuk sebagai teknologi yang paling banyak digunakan mulai dari Agustus 2021 namun langsung menjadi teknologi terbanyak dipakai urutan ke--6 di bulan selanjutnya. Selain \textit{core-js} ada juga teknologi \textit{Open Graph} yang baru muncul di bulan September 2022 dan langsung menempati urutan ketiga sebagai teknologi yang paling banyak digunakan dalam membangun dan mengembangkan \web yang kemudian menyalip \textit{Google Analytics} pada bulan Maret 2023.
+
+Hasil yang didapatkan dinilai kurang proporsional, maka visualisasi diubah menjadi visualisasi berdasarkan persentase penggunaan teknologi bukan lagi berdasarkan jumlah penggunaan. Hal ini dilakukan karena total jumlah penggunaan untuk semua teknologi setiap bulannya tidak sama sehingga agar lebih proporsional. Hasil visualisasi berdasarkan persentase penggunaan ini dapat dilihat pada Gambar~\ref{fig:persentasereal}.
+
+Terlihat adanya penurunan persentase penggunaan untuk semua teknologi yang paling banyak digunakan. Penurunan ini kemungkinan terjadi karena total penggunaan semua teknologi semakin meningkat. Penurunan paling rendah terjadi untuk teknologi \textit{jQuery Migrate} pada bulan November 2020. yang hanya dipakai sebanyak 0,02017\%. Penurunan pada setiap teknologi juga terpengaruh dari jumlah penggunaannya yang semakin tinggi setiap bulannya.  
 
 \begin{figure}[H]
     \centering
@@ -167,7 +187,7 @@ Bootstrap & 355.050.603 \\ \hline
 \end{tabular}
 \end{table}
 
-Setelah sepuluh teknologi yang paling banyak digunakan pada perangkat \mobile didapatkan kemudian divisualisasikan dengan cara yang sama seperti pada bagian \ref{subsec:perkembangansepuluhteknologi}. Visualisasi pertama dilakukan berdasarkan jumlah penggunaan teknologi. Kemudian dilanjutkan dengan visualisasi berdasarkan persentase penggunaannya. Untuk visualisasi berdasarkan jumlah penggunaannya hasilnya dapat dilihat pada Gambar~\ref{fig:sepuluhmobilereal}. Terlihat bahwa perkembangannya semakin meningkat untuk semua teknologi, namun untuk teknologi \textit{jQuery} jumlah penggunaan pada perangkat mobile memiliki rentang yang lebih tinggi. 
+Setelah sepuluh teknologi yang paling banyak digunakan pada perangkat \mobile didapatkan, kemudian divisualisasikan dengan cara yang sama seperti pada bagian \ref{subsec:perkembangansepuluhteknologi}. Visualisasi pertama dilakukan berdasarkan jumlah penggunaan teknologi. Kemudian dilanjutkan dengan visualisasi berdasarkan persentase penggunaannya. Untuk visualisasi berdasarkan jumlah penggunaannya, hasilnya dapat dilihat pada Gambar~\ref{fig:sepuluhmobilereal}. Terlihat bahwa perkembangannya semakin meningkat untuk semua teknologi seperti yang sudah dijelaskan pada \ref{subsec:perkembangansepuluhteknologi} bahwa adanya peningkatan jumlah \web yang diuji, namun untuk teknologi \textit{jQuery} jumlah penggunaan pada perangkat mobile memiliki rentang yang lebih tinggi. 
 
 \begin{figure}[H]
     \centering

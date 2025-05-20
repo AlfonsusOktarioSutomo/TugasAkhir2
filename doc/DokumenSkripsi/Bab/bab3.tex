@@ -18,11 +18,11 @@ Bagian ini akan berisi tentang penyiapan data kecil kemudian setelah itu akan di
 \subsection{Penyiapan Data Kecil}
 \label{subsec:penyiapan data kecil}
 
-Data kecil yang digunakan merupakan data \textit{sample} yang diberikan oleh \http. Data yang digunakan berasal dari data yang sudah diperbaharui oleh \http. Data yang didapatkan adalah data dari tanggal 1 Februari 2024 sampai dengan 1 Februari 2025. Data yang digunakan akan lebih berfokus pada tanggal, teknologi, \textit{client}, dan url utama dari halaman \web, sehingga kolom dan baris lainnya tidak akan digunakan. Pengumpulan data dilakukan dengan melakukan \textit{query} dengan menggunakan \textit{Google Big Query}. Hasil dari \textit{query} tadi kemudian disimpan ke dalam format CSV (\textit{Comma Separated Value}). Salah satu query yang dapat digunakan untuk mengumpulkan data dapat dilihat pada Kode~\ref{kode:kumpuldatakecil}. Kode tersebut akan mengembalikan data yang berisi kolom \textit{date, client, root\_page}, dan \textit{technology} yang berasal dari tabel \textit{pages} dan data yang diambil berasal dari rentang waktu yang sudah disebutkan sebelumnya namun, data dibatasi 10.000.000 baris.
+Data yang digunakan merupakan data \textit{sample} yang diberikan oleh \http yang berasal dari bagian \textit{public dataset} dan menggunakan tabel \textit{pages} seperti yang sudah dijelaskan pada \ref{subsec:pd}. Data yang digunakan berasal dari data yang sudah diperbaharui oleh \http. Data yang didapatkan adalah data dari tanggal 1 Februari 2024 sampai dengan 1 Februari 2025. Data yang digunakan akan lebih berfokus pada tanggal, teknologi, \textit{client}, dan url utama dari halaman \web, sehingga kolom dan baris lainnya tidak akan digunakan. Pengumpulan data dilakukan dengan melakukan \textit{query} dengan menggunakan \textit{Google Big Query}. Hasil dari \textit{query} tadi kemudian disimpan ke dalam format CSV (\textit{Comma Separated Value}). Salah satu query yang dapat digunakan untuk mengumpulkan data dapat dilihat pada Kode~\ref{kode:kumpuldatakecil}. Kode tersebut akan mengembalikan data yang berisi kolom \textit{date, client, root\_page}, dan \textit{technology} yang berasal dari tabel \textit{pages} dan data yang diambil berasal dari rentang waktu yang sudah disebutkan sebelumnya, namun data dibatasi 10.000.000 baris.
 
 \begin{lstlisting}[language=SQL, caption=Kode untuk mengumpulkan data kecil, label=kode:kumpuldatakecil]
 
-    SELECT DISTINCT date, client, root_page, t.technology,  
+    SELECT date, client, t.technology, COUNT(t.technology),  
     FROM `httparchive.crawl.pages`, UNNEST(technologies) as t 
     WHERE date BETWEEN "2024-02-01" and "2025-02-01" limit 100000000
     
@@ -40,14 +40,14 @@ Hal pertama yang dilakukan adalah dengan memuat data \textit{sample}. Contoh dar
     \centering
     \caption{Lima baris data \textit{sample}}
     \label{tab:sample}
-    \begin{tabular}{|l|l|l|l|}
+    \begin{tabular}{|l|l|l|r|}
         \hline
-        date & client & root\_page & technology \\ \hline
-        2025-02-01 & desktop & https://www.schilling-rechtsanwalt.com/ & Google Analytics \\ \hline
-        2025-02-01 & mobile & https://kiztopia.co.id/ & HSTS \\ \hline
-        2025-02-01 & mobile & https://ca.brixton.com/ & Klaviyo \\ \hline
-        2025-02-01 & mobile & https://spinfinity.casino/ & Gatsby \\ \hline
-        2025-02-01 & mobile & http://namhaerun.com/ & YouTube \\ \hline
+        date & client & technology & jumlah \\ \hline
+        2025-02-01 & desktop & Google Analytics & 12.370 \\ \hline
+        2025-02-01 & mobile &  HSTS & 131\\ \hline
+        2025-02-01 & mobile &  Klaviyo &  \\ \hline
+        2025-02-01 & mobile & Gatsby & 268 \\ \hline
+        2025-02-01 & mobile &  YouTube & 20.2669 \\ \hline
         ...&...&...&... \\ \hline
     \end{tabular}
 \end{table}
@@ -208,3 +208,85 @@ Hasil visualisasi untuk persentase penggunaan pada \textit{client} \desktop dapa
 
 \section{Eksplorasi \textit{Library Python}}
 \label{sec:library}
+
+\subsection{\textit{Tkinter}}
+\label{subsec:tkinter}
+
+\textit{Library} ini digunakan untuk membuat tampilan antarmuka grafis yang menggunakan Tcl/Tk sebagai dasarnya seperti yang sudah dijelaskan dalam \ref{sec:tkinter}. Ada beberapa hal yang dapat dilakukan dengan menggunakan library ini seperti contohnya membuat tampilan grafis untuk menampilkan grafik perkembangan teknologi pembuatan \web.
+
+Tampilan yang dapat dibuat tentunya harus memiliki fitur yang dapat digunakan oleh pengguna nantinya seperti pengguna dapat memilih teknologi yang ingin dilihat perkembangannya, pengguna dapat memilih rentang waktu untuk melihat perkembangan teknologinya, dan pengguna juga dapat melihat perkembangan teknologi berdasarkan jumlah penggunaannya atau persentase penggunaannya. Hal ini dapat dicapai dengan beberapa cara. Untuk pemilihan teknologi, pengguna dapat memilih satu atau lebih teknologi yang ingin dilihat. 
+
+\textit{Tkinter} memiliki beberapa cara untuk memenuhi kebutuhan-kebutuhan yang sudah disebutkan, misalnya untuk memilih teknologi yang ingin dilihat perkembangannya dapat digunakan \textit{checkbox}. Kode~\ref{kode:checkbox} adalah kode yang digunakan agar dapat menampilkan \textit{checkbox} yang berisi teknologi yang ingin dilihat perkembangannya.
+
+\begin{lstlisting}[language=Python, caption=Kode untuk menampilkan \textit{checkbox} berisi teknologi, label=kode:checkbox]
+
+     self.checkbox_frame = ttk.Frame(root)
+     self.checkbox_frame.pack()
+
+        self.tech_vars = {}
+        for tech in df.columns:
+            var = tk.BooleanVar(value=False)
+            cb = ttk.Checkbutton(self.checkbox_frame, text=tech, variable=var)
+            cb.pack(anchor='w')
+            self.tech_vars[tech] = var
+    
+\end{lstlisting}
+
+Kode \verb|self.checkbox_frame = ttk.Frame(root)| adalah kode untuk membuat \textit{frame} yang akan menjadi wadah bagi sekumpulan \textit{checkbox} tersebut. Parameternya diisikan \verb|root| karena \textit{frame} ini merupakan \textit{child widget} dari \textit{widget} \verb|root|, seperti yang sudah dijelaskan pada Bagian~\ref{sec:tkinter}. Baris kode \verb|self.checkbox_frame.pack()| berguna untuk meletakkan widget \textit{frame} di dalam jendela tampilan secara otomatis, dalam kata lain baris kode ini berperan sebagai \textit{geometry manager}. Baris selanjutnya adalah pengulangan yang dilakukan untuk memasukkan teknologi ke dalam \textit{checkbox}. Hasil dari menjalankan Kode~\ref{kode:checkbox} dapat dilihat pada Gambar~\ref{fig:checkbox}
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=0.25\linewidth]{Gambar/checkbox.png}
+    \caption{Checkbox yang berisi teknologi yang dapat dipilih untuk dilihat perkembangannya}
+    \label{fig:checkbox}
+\end{figure}
+
+Selain memilih teknologi yang ingin dilihat, pengguna juga dapat memilih rentang waktu yang ingin dilihat perkembangannya. Salah satu yang dapat digunakan adalah dengan menggunakan \textit{text box}. Kode~\ref{kode:tanggal} dapat dijalankan untuk memenuhi kebutuhan ini.
+
+\begin{lstlisting}[language=Python, caption=Kode untuk menampilkan \textit{textbox} berisi tanggal, label=kode:textbox]
+
+         ttk.Label(frame, text="Dari (YYYY-MM):").grid(row=0, column=0)
+        self.start_var = tk.StringVar(value=df.index[0])
+        self.start_entry = ttk.Entry(frame, textvariable=self.start_var, width=10)
+        self.start_entry.grid(row=0, column=1)
+    
+\end{lstlisting}
+
+Baris kode \verb|self.start_var = tk.StringVar(value=df.index[0])| berguna untuk mengisi \textit{textbox} dengan tanggal pertama yang ada di dalam data yang dimiliki yang kemudian diubah ke dalam bentuk \textit{string}. Baris kode \verb|self.start_entry = ttk.Entry(frame, textvariable=self.start_var, width=10)| berguna untuk membuat \textit{textbox} untuk memilih tanggalnya. Parameter \verb|frame| digunakan karena \textit{textbox} ini adalah \textit{child widget} dari \textit{widget frame}. Baris kode \verb|self.start_entry.grid(row=0, column=1)| berperan sebagai \textit{geometry manager} yang akan menempatkan \textit{textbox} pada baris 0 dan kolom 1 pada \textit{widget frame}. Hasil yang didapat setalah menjalankan kode~\ref{kode:textbox} dapat dilihat pada Gambar~\ref{fig:textbox}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.25\linewidth]{Gambar/textbox.png}
+    \caption{\textit{Textbox} untuk memilih tanggal mulai rentang waktu untuk melihat perkembangan teknologi}
+    \label{fig:textbox}
+\end{figure}
+
+Kemudian pengguna juga dapat memilih perkembangan yang ingin dilihat berdasarkan jumlah penggunaan atau persentase penggunaan teknologi. Untuk memenuhi hal tersebut maka salah satu caranya adalah dengan menggunakan \textit{radio buton}. Kode~\ref{kode:radio} adalah kode yang dapat digunakan untuk membuat \textit{radio button} ini.
+
+\begin{lstlisting}[language=Python, caption=Kode untuk menampilkan \textit{radio button} untuk memilih grafik yang dilihat, label=kode:radio]
+
+        self.mode_var = tk.StringVar(value="jumlah")
+        rb1 = ttk.Radiobutton(mode_frame, text="Jumlah Penggunaan", variable=self.mode_var, value="jumlah")
+        rb2 = ttk.Radiobutton(mode_frame, text="Persentase", variable=self.mode_var, value="persentase")
+        rb1.pack(anchor='w')
+        rb2.pack(anchor='w')
+    
+\end{lstlisting}
+
+Baris kode \verb| self.mode_var = tk.StringVar(value="jumlah")| merupakan variabel yang menyimpan mode yang akan dipakai. Kode \verb|rb1 = ttk.Radiobutton(mode_frame, text="Jumlah Penggunaan", variable=self.mode_var, value="jumlah")| berguna untuk membuat \textit{radio button} yang membuat grafik yang dilihat merupakan grafik berdasarkan jumlah penggunaan. Kode \verb| rb1.pack(anchor='w')| berguna untuk menempatkan \textit{radio button} pada jendela tampilan secara otomatis. Hasil dari kode~\ref{kode:radio} dapat dilihat pada Gambar~\ref{fig:radio}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.25\linewidth]{Gambar/radio.png}
+    \caption{\textit{Radio button} untuk memilih mode grafik yang ingin ditampilkan}
+    \label{fig:radio}
+\end{figure}
+
+Hasil secara utuh dapat dilihat pada Gambar~\ref{fig:guiutuh}. Terlihat adanya tombol ``Tampilkan Grafik'' yang akan mengarahkan pengguna ke \textit{browser} untuk melihat grafik perkembangan teknologi yang sudah dipilih.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.25\linewidth]{Gambar/Guiutuh.png}
+    \caption{Tampilan \textit{GUI} untuk melihat perkembangan teknologi pembuatan \web}
+    \label{fig:guiutuh}
+\end{figure}

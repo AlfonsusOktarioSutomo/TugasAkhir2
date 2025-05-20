@@ -374,7 +374,7 @@ Metode yang digunakan oleh \http dalam mengumpulkan data perkembangan pembuatan 
 
 \subsection{\textit{Public Dataset}}
 \label{subsec:pd}
-\http memberikan akses terhadap informasi yang lebih detail mengenai hal-hal yang ada di setiap \textit{website}, seperti \textit{metadata} dari \textit{request} dan \textit{response}, \textit{response bodies}, jejak eksekusi, dan lain-lain. \http memberikan beberapa tabel yang terbagi kedalam beberapa \textit{dataset} seperti \textit{crawl, sample\_data}, dan \textit{wappalyzer}. Dataset sendiri adalah unit logis utama untuk mengelompokan dan mengatur \textit{view, resource}, dan tabel pada \textit{Google BigQUery} dataset-dataset tersebut kemudian memiliki beberapa tabel yang dapat digunakan seperti berikut ini:
+\http memberikan akses terhadap informasi yang lebih detail mengenai hal-hal yang ada di setiap \textit{website}, seperti \textit{metadata} dari \textit{request} dan \textit{response}, \textit{response bodies}, jejak eksekusi, dan lain-lain. \http memberikan beberapa tabel yang terbagi ke dalam beberapa \textit{dataset} seperti \textit{crawl, sample\_data}, dan \textit{wappalyzer}. Dataset sendiri adalah unit logis utama untuk mengelompokkan dan mengatur \textit{view, resource}, dan tabel pada \textit{Google BigQUery} dataset-dataset tersebut kemudian memiliki beberapa tabel yang dapat digunakan seperti berikut ini:
 
 \begin{itemize}
     \item \textit{pages} adalah tabel yang terdapat pada dataset \textit{crawl} dan berisi detail mengenai halaman yang dites oleh \http. Data ini memiliki kolom sebagai berikut:
@@ -442,11 +442,16 @@ Metode yang digunakan oleh \http dalam mengumpulkan data perkembangan pembuatan 
 \end{itemize}
 
 
-\section{\textit{Structure Query Language}~\cite{book:SQLBigQuery}}
+\section{\textit{Structure Query Language}}
 \label{sec:sql} 
-\textit{Structure Query Language} atau yang biasa disebut SQL merupakan bahasa pemrograman yang bertujuan untuk menganalisi dan mengolah basis data relasional. Lakshman dalam bukunya menjelaskan bahwa SQL sangat cocok digunakan dalam lingkungan analitik yang besar seperti dalam lingkungan \textit{Big Query}. Sintaks yang dapat dipakai adalah sebagai berikut:
+\textit{Structure Query Language} atau yang biasa disebut SQL merupakan bahasa pemrograman yang bertujuan untuk menganalisis dan mengolah basis data relasional. Lakshman dalam bukunya menjelaskan bahwa SQL sangat cocok digunakan dalam lingkungan analitik yang besar seperti dalam lingkungan \textit{Big Query}~\cite{book:SQLBigQuery}. Sintaks yang dapat dipakai adalah sebagai berikut:
 \begin{itemize}
-    \item \verb|SELECT| dan \verb|FROM| merupakan sintaks yang berguna untuk memilih bagian data yang dibutuhkan dari tabel tertentu. Sintaks ini digunakan dengan cara \verb|SELECT nama, kolom FROM nama.tabel|
+    \item \verb|SELECT| merupakan sintaks yang berguna untuk memilih bagian data yang dibutuhkan dari tabel tertentu. Sintaks ini memiliki beberapa ekspresi seperti 
+    \begin{itemize}
+        \item \* Ekspresi ini akan mengembalikan sebuah kolom keluaran untuk semua kolom yang terlihat setelah menjalankan semua kueri.
+        \item expression Ekspresi ini akan mengembalikan sebuah nilai dan menghasilkan sebuah kolom keluaran.
+        \item expression. * Ekspresi ini akan menghasilkan satu kolom keluaran untuk setiap kolom atau bidang ekspresi tingkat atas.
+    \end{itemize}
     \begin{lstlisting}[language=SQL, caption=contoh penggunaan sintaks \lstinline|SELECT|, label=kode:contohselect]
         SELECT
             date, client
@@ -454,6 +459,8 @@ Metode yang digunakan oleh \http dalam mengumpulkan data perkembangan pembuatan 
             `httparchive.crawl.pages`
     \end{lstlisting}
     Kueri pada potongan Kode~\ref{kode:contohselect} akan mengembalikan tabel yang berisi kolom \textit{date} dan \textit{client} dari tabel \textit{httparchive.crawl.pages}.
+
+    \item \verb|FROM| merupakan sintaks yang berguna untuk menunjukkan asal tabel yang kolomnya dipilih oleh sintaks \verb|SELECT|. \verb|FORM| biasanya diikuti dengan nama tabel yang sudah ada seperti pada Kode~\ref{kode:contohselect} data yang dipilih berasal dari struktur `httparchive', dataset `crawl', dan tabel `pages'.
     
     \item \verb|WHERE| adalah sintaks yang berguna untuk memberikan kondisi tertentu dalam memilih data. Kondisi yang diinginkan bisa lebih dari satu maka dari itu untuk menggabungkan beberapa kondisi dapat digunakan fungsi \verb|AND|, \verb|OR|, atau \verb|BETWEEN|. Sintaks ini digunakan dengan cara \verb|SELECT nama, kolom FROM nama.tabel WHERE kondisi1 AND kondisi2|
         \begin{lstlisting}[language=SQL, caption=contoh penggunaan sintaks \lstinline|WHERE|, label=kode:contohwhere]
@@ -466,7 +473,7 @@ Metode yang digunakan oleh \http dalam mengumpulkan data perkembangan pembuatan 
     \end{lstlisting}
     Kueri pada potongan Kode~\ref{kode:contohwhere} akan mengembalikan tabel yang berisi \textit{date} dan \textit{client} dari tabel \textit{httparchive.crawl.pages} dengan kondisi yang diinginkan adalah nilai dalam kolom \textit{date} yang diambil adalah "2024-01-01".
     
-    \item \verb|GROUP BY| adalah sintaks yang berguna untuk mengelompokan data berdasarkan kelas tertentu yang terdapat dalam data. Pengelompokan ini dapat dilakukan berdasarkan lebih dari satu kelas.Sintaks ini digunakan dengan cara \verb|SELECT nama, kolom, agregat FROM nama.tabel WHERE kondisi1 AND kondisi2 GROUP BY agregat|. Kolom agregat adalah kolom yang akan dipakai sebagai kategori pemisah data.
+    \item \verb|GROUP BY| adalah sintaks yang berguna untuk mengelompokkan data berdasarkan kelas tertentu yang terdapat dalam data. Pengelompokan ini dapat dilakukan berdasarkan lebih dari satu kelas.Sintaks ini digunakan dengan cara \verb|SELECT nama, kolom, agregat FROM nama.tabel WHERE kondisi1 AND kondisi2 GROUP BY agregat|. Kolom agregat adalah kolom yang akan dipakai sebagai kategori pemisah data.
         \begin{lstlisting}[language=SQL, caption=contoh penggunaan sintaks \lstinline|GROUP BY|, label=kode:contohgroupby]
         SELECT
             date, client
@@ -572,6 +579,35 @@ sintaks-sintaks tersebut merupakan sebagian kecil dari sintaks yang dimiliki ole
     \label{fig:contoh lineplot}
 \end{figure}
 
-\section{\textit{Tk Interface}}
+\section{\textit{Tk Interface}~\cite{tkinter}}
 \label{sec:tkinter}
-\textit{Tk Interface} adalah sebuah antarmukan \textit{pyhton} standar untuk membuat aplikasi antarmuka grafis.~\cite{tkinter}
+\textit{Tk Interface} adalah sebuah antarmuka \textit{pyhton} standar untuk membuat aplikasi antarmuka grafis yang merupakan \textit{toolkit} dari gabungan bahasa Tcl dan Antarmuka Grafis Tk (Tcl/Tk). Tcl/Tk bukan \textit{library} yang berdiri sendiri melainkan gabungan dari beberapa \textit{module} yang memiliki fungsi berbeda. \textit{TK Interface} sendiri memiliki arsitektur sebagai berikut:
+\begin{itemize}
+    \item Tcl
+    
+    Tcl merupakan sebuah bahasa pemrograman seperti \textit{Python}. Bahasa ini dapat digunakan sebagai bahasa pemrograman dengan tujuan yang umum. Bahasa ini biasanya terdapat dalam aplikasi C sebagai mesin \textit{scripting} atau sebagai antarmuka untuk TK. \textit{Library Tcl} memiliki antarmuka C untuk membuat atau mengelola satu atau lebih \textit{interpreter Tcl}, menjalankan perintah dan skrip Tcl, dan menambahkan perintah kustom untuk dijalankan dalam C atau Tcl. Setiap interpreter memiliki antrian \textit{events} dan terdapat fasilitas untuk mengirimkan \textit{events} ke dalamnya untuk kemudian memprosesnya. Tidak seperti \textit{Python} model eksekusi Tcl dirancang berdasarkan \textit{multitasking} kooperatif dan \textit{Tkinter} menjembatani perbedaan ini.
+
+    \item Tk
+
+    Tk adalah paket Tcl yang diimplementasikan dalam C yang menambahkan perintah kustom untuk membuat atau memanipulasi \textit{widget} antarmuka grafis. Setiap objek tk memiliki interpreter Tcl nya sendiri dengan Tk yang dimuat ke dalamnya. Tk menggunakan antrian \textit{event} miliki Tcl untuk membuat dan memproses \textit{event} dari \textit{GUI}.
+
+    \item Ttk
+
+    Ttk atau \textit{Themed tk} adalah bagian \textit{widget} Tk yang baru yang memberikan penampilan yang lebih baik pada \textit{platform} yang berbeda. Ttk didistribusikan sebagai bagian dari Tk. 
+    
+\end{itemize}
+
+Ketika aplikasi \textit{Python} menggunakan kelas \textit{Tkinter} seperti untuk membuat \textit{widget}, modul \textit{Tkinter} akan terlebih dahulu menyusun urutan skrip \textit{Tcl/Tk}. Tk juga memiliki beberapa konsep penting seperti:
+\begin{itemize}
+    \item \textit{widget}
+
+    Antarmuka pengguna Tkinter dibuat dari \textit{widget} individual. Setiap \textit{widget} direpresentasikan sebagai objek \textit{Python}. yang dibuat dari kelas-kelas seperti \verb|ttk.Frame|, \verb|ttk.Label|, dan \verb|ttk.Button|
+
+    \item \textit{widget hierarchy}
+
+    Setiap \textit{widget} disusun dalam sebuah hierarki. Ketika membuat setiap \textit{child widget}, \textit{parent widget} nya dilewati sebagai argumen pertama dalam konsturktor \textit{widget} nya 
+
+    \item \textit{Geometry Management}
+
+    Setiap \textit{widget} yang dibuat tidak langsung ditambahkan ke antarmuka pengguna namun \textit{Geometry Manager} seperti \verb|grid| mengatur dimana \textit{widget} tersebut akan diletakan di antarmuka pengguna.
+\end{itemize}
